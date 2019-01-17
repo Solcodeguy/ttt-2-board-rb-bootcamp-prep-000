@@ -1,161 +1,51 @@
 # Define the variable board below.
-class board
-  def board = Array.new(9, " ")
-  end
-  
-  WIN_COMBINATIONS = [
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,4,8],
-  [2,4,6]
-  ]
-  
-  def display_board
-    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} "
-    puts "-----------"
-    puts " #{@board[3]} | #{@board[4]} | #{@board[5]} "
-    puts "-----------"
-    puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
-  end
-  
-  def input_to_index(user_input)
-    user_input.to_i - 1
-  end
-  
-  def move(index, players_token)
-    @board[index] = players_token
-  end
-  
-  def position_taken?(index)
-    if (@board[index] == " " || @board[index] == "" || @board[index] == nil)
-      return false
-    else
-      return true
-    end
-  end
-  
-  def valid_move?(position)
-    if (position < 0 || position > 8) # if not on board
-      return false
-    elsif (@board[position] == "X" || @board[position] == "O") # if occupied
-      return false
-    else
-      return true
-    end
-  end
-  
-  def turn
-    puts "Please enter 1-9:"
-    input = gets.strip
-    index = input_to_index(input)
-    if valid_move?(index)
-      move(index, current_player)
-      display_board
-    else
-      turn
-    end
-  end
-  
-  def turn_count
-    counter = 0
-    @board.each do |element|
-      if (element == "X" || element == "O")
-        counter += 1
-      else
-        # do nothing
-      end
-    end
-    return counter
-  end
-  
-  def current_player
-    if (turn_count.even? == true)
-      return "X"
-    else
-      return "O"
-    end
-  end
-  
-  def won?
-    WIN_COMBINATIONS.each do |win_combination|
-      position_1 = @board[win_combination[0]]
-      position_2 = @board[win_combination[1]]
-      position_3 = @board[win_combination[2]]
-      if ((position_1 == "X" && position_2 == "X" && position_3 == "X") || (position_1 == "O" && position_2 == "O" && position_3 == "O"))
-        return win_combination
-      else
-        # do nothing
-      end
-    end
-    return nil
-  end
-  
-  def full?
-    counter = 0
-    @board.each do |element|
-      if (element == "X" || element == "O")
-        counter += 1
-      else
-        # do nothing
-      end
-    end
-    if counter == 9
-      return true
-    else
-      return false
-    end
-  end
-  
-  def draw?
-    if full? && !won?
-      return true
-    else
-      return false
-    end
-  end
-  
-  def over?
-    if ( won? || draw? || full? )
-      return true
-    else
-      return false
-    end
-  end
-  
-  def winner
-    if won?
-      WIN_COMBINATIONS.each do |win_combination|
-        position_1 = @board[win_combination[0]]
-        position_2 = @board[win_combination[1]]
-        position_3 = @board[win_combination[2]]
-        if (position_1 == "X" && position_2 == "X" && position_3 == "X")
-          return "X"
-        elsif (position_1 == "O" && position_2 == "O" && position_3 == "O")
-          return "O"
-        else
-          # do nothing
-        end
-      end
-    else
-      return nil
-    end
-  end
-  
-  def play
-    while !over?
-      turn
-    end
-    if won?
-      puts "Congratulations " + winner + "!"
-    elsif draw?
-      puts "Cat's Game!"
-    else
-      #do nothing
-    end
-  end
-
+class Board
+  def initialize
+        @board = ["", "", "", "", "", "", "", "", ""] #simply returning instance variable @board
+        @winner_of_game = nil
 end
+
+    def set_position(position, marker)  
+       @board[position] = marker  
+    end
+
+    def check_position?(position)
+        if @board[position] == ""
+            true
+        else
+            false   #return false for the free position
+        end
+    end
+    def check_full?()  
+        @board.count("") == 0 
+    end
+    def stub_winner? #check if player won the game
+        winner = false
+        win_array = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+        win_array.each do |index|
+            x_counter = 0
+            o_counter = 0
+            index.each do |index_check|
+                if @board[index_check] == "X"  #check for X in board
+                    x_counter += 1
+                elsif @board[index_check] == "O" #check for O in board
+                    o_counter += 1
+                end
+                if x_counter == 3
+                    @winner_of_game = "X"
+                    winner = true
+                elsif o_counter == 3
+                    @winner_of_game = "O"
+                    winner = true
+                end
+            end
+        end
+        return winner 
+    end
+    def tie #when game has full board marked and has no winner 
+        stub_winner? == false && check_full? == true  
+    end
+end
+# board = Board.new
+# board.set_position(1,"x")
+# p board.boar
