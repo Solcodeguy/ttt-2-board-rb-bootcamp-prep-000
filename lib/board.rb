@@ -84,8 +84,8 @@ def open_positions
   row.each_with_index do |token, x|
     if token == '_'
       open_pos << [y,x]
-   end
-end
+        end
+     end
     end
     open_pos
   end
