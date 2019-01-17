@@ -1,5 +1,5 @@
 # Define the variable board below.
-class TicTacToe
+class board
   def board = Array.new(9, " ")
   end
   
